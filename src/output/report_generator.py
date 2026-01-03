@@ -27,6 +27,7 @@ class ReportGenerator:
     def generate_analysis_report(
         self,
         analysis: Dict[str, Any],
+        output_path: Optional[str] = None,
         player_name: str = "浅見江里佳",
         team_name: str = "文化学園大学杉並"
     ) -> str:
@@ -130,8 +131,12 @@ class ReportGenerator:
                 report += f"{i}. {item}\n"
         
         # ファイルに保存
-        timestamp_file = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = self.output_dir / f"analysis_report_{timestamp_file}.md"
+        if output_path:
+            output_file = Path(output_path)
+            output_file.parent.mkdir(parents=True, exist_ok=True)
+        else:
+            timestamp_file = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = self.output_dir / f"analysis_report_{timestamp_file}.md"
         
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(report)
@@ -141,6 +146,7 @@ class ReportGenerator:
     def generate_strategy_sheet(
         self,
         strategy: Dict[str, Any],
+        output_path: Optional[str] = None,
         player_name: str = "浅見江里佳",
         opponent_name: Optional[str] = None
     ) -> str:
@@ -211,8 +217,12 @@ class ReportGenerator:
                 sheet += f"**{i}. {point}**\n\n"
         
         # ファイルに保存
-        timestamp_file = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = self.output_dir / f"strategy_sheet_{timestamp_file}.md"
+        if output_path:
+            output_file = Path(output_path)
+            output_file.parent.mkdir(parents=True, exist_ok=True)
+        else:
+            timestamp_file = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = self.output_dir / f"strategy_sheet_{timestamp_file}.md"
         
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(sheet)
@@ -222,6 +232,7 @@ class ReportGenerator:
     def generate_practice_plan(
         self,
         practice_plan: Dict[str, Any],
+        output_path: Optional[str] = None,
         player_name: str = "浅見江里佳"
     ) -> str:
         """
@@ -305,8 +316,12 @@ class ReportGenerator:
                 plan += "\n"
         
         # ファイルに保存
-        timestamp_file = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = self.output_dir / f"practice_plan_{timestamp_file}.md"
+        if output_path:
+            output_file = Path(output_path)
+            output_file.parent.mkdir(parents=True, exist_ok=True)
+        else:
+            timestamp_file = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = self.output_dir / f"practice_plan_{timestamp_file}.md"
         
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(plan)
