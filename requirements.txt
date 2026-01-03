@@ -1,0 +1,18 @@
+# Core
+openai>=1.0.0
+
+# Video Processing
+opencv-python>=4.8.0
+mediapipe>=0.10.0
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Output Generation
+markdown>=3.4.0
+weasyprint>=59.0
+
+# Utilities
+pyyaml>=6.0
+python-dotenv>=1.0.0

@@ -1,0 +1,63 @@
+# AI主導型 卓球パフォーマンス最大化システム 設定ファイル
+
+# API設定
+api:
+  gemini:
+    model: "gemini-2.5-flash"
+    max_tokens: 4096
+    temperature: 0.7
+
+# 動画処理設定
+video:
+  max_duration: 600  # 秒
+  frame_rate: 30
+  resolution: [1280, 720]
+  supported_formats:
+    - ".mp4"
+    - ".mov"
+    - ".avi"
+
+# 分析設定
+analysis:
+  technique_weight: 0.4
+  tactics_weight: 0.4
+  mental_weight: 0.2
+  
+  # 技術評価項目
+  technique_items:
+    - forehand_drive
+    - backhand_drive
+    - serve
+    - receive
+    - footwork
+  
+  # 戦術評価項目
+  tactics_items:
+    - scoring_patterns
+    - losing_patterns
+    - serve_tactics
+    - receive_tactics
+    - match_management
+
+# 出力設定
+output:
+  format: "markdown"
+  language: "ja"
+  report_dir: "data/results"
+  
+  # レポートテンプレート
+  templates:
+    analysis_report: "templates/analysis_report.md"
+    strategy_sheet: "templates/strategy_sheet.md"
+    practice_plan: "templates/practice_plan.md"
+
+# データベース設定
+database:
+  type: "sqlite"
+  path: "data/database.sqlite"
+
+# ログ設定
+logging:
+  level: "INFO"
+  file: "logs/app.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
