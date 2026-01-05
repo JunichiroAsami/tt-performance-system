@@ -380,6 +380,13 @@ class IntegrationEngine:
         json_str = self._extract_json(result_text)
         
         try:
+            # JSONのクリーニング（余分な文字の削除）
+            json_str = json_str.strip()
+            if not json_str.startswith("{") and "{" in json_str:
+                json_str = "{" + json_str.split("{", 1)[1]
+            if not json_str.endswith("}") and "}" in json_str:
+                json_str = json_str.rsplit("}", 1)[0] + "}"
+                
             drills_data = json.loads(json_str)
             
             for drill in drills_data.get("ドリル", []):

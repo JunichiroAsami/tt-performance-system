@@ -2,7 +2,7 @@
 
 **Table Tennis Performance Maximization System**
 
-**バージョン**: 2.2  
+**バージョン**: 3.0  
 **最終更新日**: 2026年1月5日
 
 ---
@@ -15,10 +15,11 @@
 
 1. **深い分析レポート** - 技術、戦術、フットワークの多角的評価
 2. **相手選手の分析** - 対戦相手の強み・弱点・対策
-3. **定量分析** - 姿勢推定、フットワーク分析（v2.2で追加）
+3. **定量分析** - 姿勢推定、フットワーク分析
 4. **試合戦略シート** - 対戦相手に対する具体的な戦い方
 5. **練習計画書** - 課題克服のための練習メニュー
-6. **フォーム改善ドリル** - 定量分析に基づく具体的な練習ドリル（v2.2で追加）
+6. **フォーム改善ドリル** - 定量分析に基づく具体的な練習ドリル
+7. **戦略チェックリストWebアプリ** - 試合中に素早く確認できるWebツール（v3.0で追加）
 
 ---
 
@@ -30,7 +31,7 @@
 | Phase 1.1 | 相手選手分析 | Gemini 2.5 Flash | ✅完了 |
 | Phase 2 | 定量分析（CV） | OpenCV, MediaPipe | ✅完了 |
 | Phase 2.1 | 統合分析 | CV + LLM | ✅完了 |
-| Phase 3 | 可視化・永続化 | SQLite, Flask | ❌未着手 |
+| Phase 3 | Webアプリ化 | React, Tailwind CSS | ✅完了 |
 
 ---
 
@@ -44,7 +45,7 @@
 │ ・メタデータ │    │  │(姿勢推定) │ │ (定性分析)    │   │    │ ・戦略シート│
 │             │    │  └─────┬─────┘ └───────┬───────┘   │    │ ・練習計画  │
 │             │    │        │               │           │    │ ・ドリル    │
-│             │    │        └───────┬───────┘           │    │             │
+│             │    │        └───────┬───────┘           │    │ ・Webアプリ │
 │             │    │        ┌───────▼───────┐           │    │             │
 │             │    │        │IntegrationEngine│          │    │             │
 │             │    │        │  (統合分析)    │           │    │             │
@@ -59,6 +60,7 @@
 ### 前提条件
 
 - Python 3.11+
+- Node.js 20+ (Webアプリ用)
 - OpenAI互換API キー（環境変数 `OPENAI_API_KEY` に設定済み）
 - MediaPipe（姿勢推定用）
 
@@ -70,52 +72,46 @@ cd tt-performance-system
 pip install -r requirements.txt
 ```
 
-### 実行
+### 実行（分析エンジン）
 
 ```bash
 # 動画の全機能分析（自己分析 + 相手分析 + 戦略 + 練習計画）
 python src/main.py full --video data/videos/match.mp4 -v
 
-# 自己分析のみ
-python src/main.py analyze --video data/videos/match.mp4
-
-# 相手選手の分析
-python src/main.py opponent --video data/videos/match.mp4
-
-# 定量分析（姿勢推定 + フットワーク）（v2.2 NEW）
+# 定量分析（姿勢推定 + フットワーク）
 python src/analysis/cv_analyzer.py data/videos/match.mp4
 
-# 統合分析（定量 + 定性）（v2.2 NEW）
+# 統合分析（定量 + 定性）
 python src/analysis/integration_engine.py data/results/v2/cv_analysis.json
+```
 
-# 戦略生成のみ
-python src/main.py strategy --video data/videos/match.mp4
+### 実行（Webアプリ）
 
-# 練習計画生成のみ
-python src/main.py practice --video data/videos/match.mp4
+```bash
+cd ../tt-strategy-checklist
+pnpm install
+pnpm dev
 ```
 
 ---
 
-## Phase 2 定量分析の詳細
+## Phase 3 Webアプリの詳細
 
-### CVAnalyzer（姿勢推定）
+### 戦略チェックリスト（tt-strategy-checklist）
 
-MediaPipeを使用して、動画から選手の姿勢を推定します。
+試合中の緊張した状態でも、戦略や注意点を素早く確認できるWebアプリケーションです。
 
-**出力データ:**
-- 関節角度（肘、膝、体幹）の統計
-- スイング検出（回数、タイミング）
-- フットワーク（移動距離、速度、左右/前後比率）
+**主な機能:**
+- **必勝ポイント表示**: 相手に勝つための3つの重要ポイント
+- **場面別チェックリスト**: サーブ、レシーブ、ラリーごとの確認事項
+- **メンタル・ルール確認**: 緊張時の対処法と絶対ルール
+- **相手情報**: 相手の強み・弱点と攻略法
 
-### IntegrationEngine（統合分析）
-
-CVAnalyzerの数値データとLLMの定性分析を組み合わせて、より詳細な分析を行います。
-
-**出力データ:**
-- フォーム分析（フォアハンド、バックハンド、全体姿勢）
-- フットワーク分析（効率性、改善点）
-- フォーム改善ドリル（具体的な練習メニュー）
+**技術スタック:**
+- React 19
+- Tailwind CSS 4
+- shadcn/ui
+- Vite
 
 ---
 
@@ -146,40 +142,28 @@ tt-performance-system/
 ├── README.md
 ├── requirements.txt
 ├── config/
-│   └── settings.yaml
 ├── docs/                    # ドキュメント
-│   ├── project_plan.md
-│   ├── WBS.md
-│   ├── business_requirements.md
-│   ├── system_architecture.md
-│   ├── development_spec.md
-│   ├── webapp_spec.md       # Webアプリ仕様書
-│   └── mockup/              # UIモックアップ
-├── src/                     # ソースコード
+├── src/                     # 分析エンジンソースコード
 │   ├── main.py
 │   ├── analysis/
 │   │   ├── llm_analyzer.py
-│   │   ├── cv_analyzer.py   # 姿勢推定（v2.2）
-│   │   ├── ball_tracker.py  # ボールトラッキング（v2.2）
-│   │   ├── integration_engine.py  # 統合分析（v2.2）
+│   │   ├── cv_analyzer.py   # 姿勢推定
+│   │   ├── ball_tracker.py  # ボールトラッキング
+│   │   ├── integration_engine.py  # 統合分析
 │   │   └── prompts.py
 │   └── output/
-│       └── report_generator.py
 ├── tests/                   # テストコード
-│   ├── unit/
-│   ├── integration/
-│   └── e2e/
 └── data/                    # データ
-    ├── videos/
-    └── results/
-        └── v2/
-            ├── analysis.json
-            ├── opponent_analysis.json
-            ├── cv_analysis.json        # 姿勢推定結果（v2.2）
-            ├── integrated_analysis.json # 統合分析結果（v2.2）
-            ├── strategy.json
-            ├── strategy_summary.md
-            └── practice_plan.json
+
+tt-strategy-checklist/       # Webアプリ（別リポジトリとして管理推奨）
+├── package.json
+├── client/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   └── App.tsx
+│   └── index.html
+└── server/
 ```
 
 ---
@@ -197,7 +181,7 @@ tt-performance-system/
 | FS-01〜04 | 戦略生成 | ✅Phase 1 |
 | FP-01〜02 | 練習計画生成 | ✅Phase 1 |
 | FP-03 | フォーム改善ドリル | ✅Phase 2 |
-| FR-01〜03 | レポート・可視化 | ❌Phase 3 |
+| FR-01〜03 | レポート・可視化 | ✅Phase 3 |
 
 ---
 
@@ -218,6 +202,7 @@ Private - 文化学園大学杉並 卓球部専用
 
 | 日付 | バージョン | 変更内容 |
 |:---|:---|:---|
+| 2026-01-05 | 3.0 | Phase 3完了: 戦略チェックリストWebアプリの実装 |
 | 2026-01-05 | 2.2 | Phase 2完了: 姿勢推定、フットワーク分析、統合分析、フォーム改善ドリル |
 | 2026-01-05 | 2.1 | 相手選手の分析機能を追加 |
 | 2026-01-04 | 2.0 | V2システム（動画直接送信方式）へ移行 |
