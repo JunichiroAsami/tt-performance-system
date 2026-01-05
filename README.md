@@ -2,8 +2,8 @@
 
 **Table Tennis Performance Maximization System**
 
-**バージョン**: 2.0  
-**最終更新日**: 2026年1月4日
+**バージョン**: 2.1  
+**最終更新日**: 2026年1月5日
 
 ---
 
@@ -14,8 +14,9 @@
 動画を入力として、AIが自動的に以下を生成します：
 
 1. **深い分析レポート** - 技術、戦術、フットワークの多角的評価
-2. **試合戦略シート** - 対戦相手に対する具体的な戦い方
-3. **練習計画書** - 課題克服のための練習メニュー
+2. **相手選手の分析** - 対戦相手の強み・弱点・対策（v2.1で追加）
+3. **試合戦略シート** - 対戦相手に対する具体的な戦い方
+4. **練習計画書** - 課題克服のための練習メニュー
 
 ---
 
@@ -23,7 +24,8 @@
 
 | フェーズ | 機能 | 技術 | 状態 |
 |:---|:---|:---|:---:|
-| Phase 1 | 定性分析（LLM） | Gemini API | ✅完了 |
+| Phase 1 | 定性分析（LLM） | Gemini 2.0 Flash | ✅完了 |
+| Phase 1.1 | 相手選手分析 | Gemini 2.0 Flash | ✅完了 |
 | Phase 2 | 定量分析（CV） | OpenCV, MediaPipe | 🔄開発中 |
 | Phase 3 | 可視化・永続化 | SQLite, Flask | ❌未着手 |
 
@@ -61,11 +63,14 @@ pip install -r requirements.txt
 ### 実行
 
 ```bash
-# 動画の全機能分析
+# 動画の全機能分析（自己分析 + 相手分析 + 戦略 + 練習計画）
 python src/main.py full --video data/videos/match.mp4 -v
 
-# 分析のみ
+# 自己分析のみ
 python src/main.py analyze --video data/videos/match.mp4
+
+# 相手選手の分析（v2.1 NEW）
+python src/main.py opponent --video data/videos/match.mp4
 
 # 戦略生成のみ
 python src/main.py strategy --video data/videos/match.mp4
@@ -160,5 +165,6 @@ Private - 文化学園大学杉並 卓球部専用
 
 | 日付 | バージョン | 変更内容 |
 |:---|:---|:---|
-| 2026-01-04 | 2.0 | ドキュメント体系の全面改訂に伴う更新 |
+| 2026-01-05 | 2.1 | 相手選手の分析機能を追加 |
+| 2026-01-04 | 2.0 | V2システム（動画直接送信方式）へ移行 |
 | 2026-01-04 | 1.0 | 初版作成 |
